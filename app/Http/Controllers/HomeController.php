@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
+
 
 class HomeController extends Controller
 {
@@ -23,6 +27,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = User::find(Auth::id());
+
+        Log::info('User role: ' . $user->role);
+
+        if ($user->isAdmin()) {
+            Log::info('User is admin');
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->isUser()) {
+            Log::info('User is user');
+            return redirect()->route('user.dashboard');
+        }
+
+        Log::info('User role not recognized');
+        return redirect('/home'); // Redirect default jika role tidak sesuai
     }
 }

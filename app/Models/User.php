@@ -42,4 +42,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    use Notifiable;
+
+    // Method untuk cek apakah user adalah admin
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    // Method untuk cek apakah user adalah user biasa
+    public function isUser()
+    {
+        return $this->role === 'user';
+    }
 }
